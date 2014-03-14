@@ -20,6 +20,8 @@ public class Trabalho {
 	public static final int QT_10 = 10;
 	private static final String ZIP_FILE_PATH = "src"+File.separator+"resources"+File.separator+"zip";
 	public static void main(String[] args) {
+		File zipFolder = new File(ZIP_FILE_PATH);
+		zipFolder.mkdirs();
 		List<Profile> profilesSeriais = new ArrayList<Profile>();
 		List<Profile> profilesParalelos = new ArrayList<Profile>();
 		List<File> listaTxt = FileUtils.listarArquivos("src"+File.separator+"resources"+File.separator+"txt");
