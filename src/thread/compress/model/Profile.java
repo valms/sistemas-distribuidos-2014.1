@@ -20,7 +20,7 @@ public class Profile {
 	
 	@Override
 	public String toString() {
-		System.out.println("Iteração: "+this.getIteracao());
+		System.out.println("IteraÃ§Ã£o: "+this.getIteracao());
 		System.out.println(this.getNome()+" - "+this.getTamanho()+" - "+this.getTipoAqruivo());
 		System.out.println("Tempo10: "+this.getTempo10()+" (s)");
 		System.out.println("Tempo50: "+this.getTempo50()+" (s)");
