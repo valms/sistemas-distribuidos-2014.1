@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 
 public class EchoServer {
 
@@ -15,6 +16,7 @@ public class EchoServer {
 
 	public void ouvir() {
 
+		//aumentar o buffer caso queira receber e ecoar mais pacotes
 		byte[] buffer = new byte[1000];
 		DatagramPacket pacoteRecebido = new DatagramPacket(buffer, buffer.length);
 		try {
@@ -31,10 +33,13 @@ public class EchoServer {
 				System.out.println(conteudo);
 				pacoteRecebido.setPort(server.getLocalPort() + 1);
 				server.send(pacoteRecebido);
-			} catch (IOException e) {
-				// caso solte um servertimeoutexception, sai do loop, não tem
+			} catch (SocketTimeoutException e) {
+				// caso solte um sockettimeoutexception, sai do loop, não tem
 				// mais pacotes pra receber
 				break;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 
 		}

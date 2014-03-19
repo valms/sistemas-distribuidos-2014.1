@@ -1,11 +1,11 @@
 package sockets.echoserver;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 
 public class Main {
 	public static void main(String[] args) {
@@ -20,7 +20,8 @@ public class Main {
 			DatagramSocket client = new DatagramSocket();
 			DatagramPacket pacoteEnviado;
 
-			// gerar pacotes e enviá-los
+			// gerar pacotes com os valores de i e enviá-los, assim fica fácil
+			// testar ordem de recebimento depois
 			for (int i = 0; i < pacotes; i++) {
 				byte[] dados = Integer.toString(i).getBytes();
 				pacoteEnviado = new DatagramPacket(dados, dados.length, localhost, porta);
@@ -55,9 +56,15 @@ public class Main {
 		while (true) {
 			try {
 				analisador.receive(pacoteRecebido);
-			} catch (IOException e) {
+			} catch (SocketTimeoutException e) {
+				// caso solte um sockettimeoutexception, sai do loop, não tem
+				// mais pacotes pra receber
 				break;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
+
 			pacotesRecebidos++;
 			String conteudo = new String(pacoteRecebido.getData(), 0, pacoteRecebido.getLength());
 			int valor = Integer.parseInt(conteudo);
@@ -70,7 +77,11 @@ public class Main {
 		analisador.close();
 		System.out.println("Pacotes enviados: " + pacotes);
 		System.out.println("Pacotes recebidos: " + pacotesRecebidos);
-		System.out.println("Mudou ordem de entrega do recebimento? " + mudouOrdem);
+		if (mudouOrdem) {
+			System.out.println("Mudou ordem de entrega do recebimento? Sim");
+		} else {
+			System.out.println("Mudou ordem de entrega do recebimento? Não");
+		}
 
 	}
 }
