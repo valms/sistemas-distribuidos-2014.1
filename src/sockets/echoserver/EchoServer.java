@@ -9,6 +9,7 @@ import java.net.SocketTimeoutException;
 public class EchoServer {
 
 	public static void start() {
+		System.out.println("Subindo servidor...");
 		int porta = 60000;
 		byte[] buffer = new byte[1000];
 		DatagramPacket pacoteRecebido = new DatagramPacket(buffer,
@@ -31,12 +32,13 @@ public class EchoServer {
 			} catch (SocketTimeoutException e) {
 				// caso solte um sockettimeoutexception, sai do loop, nao tem
 				// mais pacotes pra receber
-				e.printStackTrace();
+//				e.printStackTrace();
 				break;
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
+		System.out.println("Fechando servidor...");
 		server.close();
 	}
 	public static void main(String[] args) {

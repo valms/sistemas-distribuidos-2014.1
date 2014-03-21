@@ -9,6 +9,7 @@ import java.net.SocketTimeoutException;
 
 public class Client {
 	public static void start() {
+		System.out.println("Subindo cliente...");
 		DatagramSocket analisador = null;
 		int porta = 60000;
 		int pacotes = 1000;
@@ -65,6 +66,7 @@ public class Client {
 			valorAnterior = valor;
 
 		}
+		System.out.println("Fechando cliente...");
 		analisador.close();
 		System.out.println("Pacotes enviados: " + pacotes);
 		System.out.println("Pacotes recebidos: " + pacotesRecebidos);

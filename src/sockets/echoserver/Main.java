@@ -1,87 +1,33 @@
 package sockets.echoserver;
 
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
+import java.util.concurrent.Semaphore;
+
 
 public class Main {
+	public static Semaphore s = new Semaphore(2);
+	
 	public static void main(String[] args) {
-		DatagramSocket analisador = null;
-		int porta = 60000;
-		int pacotes = 1000;
 		try {
-
-			EchoServer es = new EchoServer(porta);
-
-			InetAddress localhost = InetAddress.getLocalHost();
-			DatagramSocket client = new DatagramSocket();
-			DatagramPacket pacoteEnviado;
-
-			// gerar pacotes com os valores de i e enviá-los, assim fica fácil
-			// testar ordem de recebimento depois
-			for (int i = 0; i < pacotes; i++) {
-				byte[] dados = Integer.toString(i).getBytes();
-				pacoteEnviado = new DatagramPacket(dados, dados.length, localhost, porta);
-
-				client.send(pacoteEnviado);
-
-			}
-			analisador = new DatagramSocket(porta + 1);
-			es.ouvir();
-			es.fechar();
-			client.close();
-		} catch (SocketException e) {
-			// TODO Auto-generated catch block
+			s.acquire(1);
+			new Thread(new Runnable() {
+				public void run() {
+					EchoServer.start();
+					s.release(1);
+				}
+			}).start();
+			s.acquire(1);
+			new Thread(new Runnable() {
+				public void run() {
+					Client.start();
+					s.release(1);
+				}
+			}).start();
+			s.acquire(2);
+			s.release(2);
+		} catch (InterruptedException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} finally {
+			System.exit(0);
 		}
-
-		byte[] buffer = new byte[1000];
-		DatagramPacket pacoteRecebido = new DatagramPacket(buffer, buffer.length);
-		int valorAnterior = -1;
-		int pacotesRecebidos = 0;
-		boolean mudouOrdem = false;
-		try {
-			analisador.setSoTimeout(1000);
-		} catch (SocketException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		// analisar os pacotes enviados pelo servidor de eco
-		while (true) {
-			try {
-				analisador.receive(pacoteRecebido);
-			} catch (SocketTimeoutException e) {
-				// caso solte um sockettimeoutexception, sai do loop, não tem
-				// mais pacotes pra receber
-				break;
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			pacotesRecebidos++;
-			String conteudo = new String(pacoteRecebido.getData(), 0, pacoteRecebido.getLength());
-			int valor = Integer.parseInt(conteudo);
-			if (valor <= valorAnterior) {
-				mudouOrdem = true;
-			}
-			valorAnterior = valor;
-
-		}
-		analisador.close();
-		System.out.println("Pacotes enviados: " + pacotes);
-		System.out.println("Pacotes recebidos: " + pacotesRecebidos);
-		if (mudouOrdem) {
-			System.out.println("Mudou ordem de entrega do recebimento? Sim");
-		} else {
-			System.out.println("Mudou ordem de entrega do recebimento? Não");
-		}
-
 	}
 }
