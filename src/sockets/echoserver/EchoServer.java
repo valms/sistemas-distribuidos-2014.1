@@ -25,8 +25,8 @@ public class EchoServer {
 		while (true) {
 			try {
 				server.receive(pacoteRecebido);
-				String conteudo = new String(pacoteRecebido.getData());
-				System.out.println(conteudo);
+//				String conteudo = new String(pacoteRecebido.getData());
+//				System.out.println(conteudo);
 				pacoteRecebido.setPort(server.getLocalPort() + 1);
 				server.send(pacoteRecebido);
 			} catch (SocketTimeoutException e) {

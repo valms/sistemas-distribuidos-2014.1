@@ -40,6 +40,7 @@ public class Client {
 		int valorAnterior = -1;
 		int pacotesRecebidos = 0;
 		boolean mudouOrdem = false;
+		boolean pulouPacotes = false;
 		try {
 			analisador.setSoTimeout(5000);
 		} catch (SocketException e1) {
@@ -49,6 +50,18 @@ public class Client {
 		while (true) {
 			try {
 				analisador.receive(pacoteRecebido);
+				String conteudo = new String(pacoteRecebido.getData(), 0, pacoteRecebido.getLength());
+				int valor = Integer.parseInt(conteudo);
+				if(valor != pacotesRecebidos){
+					pulouPacotes = true;
+				}
+				if (valor <= valorAnterior) {
+					mudouOrdem = true;
+				}
+//				System.out.println("Pacotes Recebidos: "+pacotesRecebidos);
+//				System.out.println("Valor: "+valor);
+				pacotesRecebidos++;
+				valorAnterior = valor;
 			} catch (SocketTimeoutException e) {
 				// caso solte um sockettimeoutexception, sai do loop, não tem
 				// mais pacotes pra receber
@@ -57,13 +70,6 @@ public class Client {
 				e.printStackTrace();
 			}
 
-			pacotesRecebidos++;
-			String conteudo = new String(pacoteRecebido.getData(), 0, pacoteRecebido.getLength());
-			int valor = Integer.parseInt(conteudo);
-			if (valor <= valorAnterior) {
-				mudouOrdem = true;
-			}
-			valorAnterior = valor;
 
 		}
 		System.out.println("Fechando cliente...");
@@ -74,6 +80,11 @@ public class Client {
 			System.out.println("Mudou ordem de entrega do recebimento? Sim");
 		} else {
 			System.out.println("Mudou ordem de entrega do recebimento? Não");
+		}
+		if (pulouPacotes) {
+			System.out.println("Pulou pacotes no recebimento? Sim");
+		} else {
+			System.out.println("Pulou pacotes no recebimento? Não");
 		}
 
 	}
