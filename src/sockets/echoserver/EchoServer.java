@@ -8,25 +8,20 @@ import java.net.SocketTimeoutException;
 
 public class EchoServer {
 
-	private DatagramSocket server;
-
-	public EchoServer(int porta) throws SocketException {
-		server = new DatagramSocket(porta);
-	}
-
-	public void ouvir() {
-
-		//aumentar o buffer caso queira receber e ecoar mais pacotes
+	public static void start() {
+		int porta = 60000;
 		byte[] buffer = new byte[1000];
-		DatagramPacket pacoteRecebido = new DatagramPacket(buffer, buffer.length);
+		DatagramPacket pacoteRecebido = new DatagramPacket(buffer,
+				buffer.length);
+		DatagramSocket server = null;
 		try {
-			server.setSoTimeout(1000);
+			server = new DatagramSocket(porta);
+			server.setSoTimeout(5000);
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		while (true) {
-
 			try {
 				server.receive(pacoteRecebido);
 				String conteudo = new String(pacoteRecebido.getData());
@@ -34,18 +29,17 @@ public class EchoServer {
 				pacoteRecebido.setPort(server.getLocalPort() + 1);
 				server.send(pacoteRecebido);
 			} catch (SocketTimeoutException e) {
-				// caso solte um sockettimeoutexception, sai do loop, não tem
+				// caso solte um sockettimeoutexception, sai do loop, nao tem
 				// mais pacotes pra receber
+				e.printStackTrace();
 				break;
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
 		}
-	}
-
-	public void fechar() {
 		server.close();
+	}
+	public static void main(String[] args) {
+		start();
 	}
 }
