@@ -14,7 +14,8 @@ public class Client {
 		int porta = 60000;
 		int pacotes = 1000;
 		try {
-			InetAddress localhost = InetAddress.getLocalHost();
+//			InetAddress localhost = InetAddress.getLocalHost();
+			InetAddress localhost = InetAddress.getByName("all-systems.mcast.net");
 			DatagramSocket client = new DatagramSocket();
 			DatagramPacket pacoteEnviado;
 
