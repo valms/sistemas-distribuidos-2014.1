@@ -7,7 +7,7 @@ public class MulticastSniffer {
 	public static void main(String[] args) {
 		InetAddress group = null;
 		int port = 0;
-		// Lê o endereço do grupo (IP + porta) da linha de comando
+		// Lï¿½ o endereï¿½o do grupo (IP + porta) da linha de comando
 		try {
 //			group = InetAddress.getByName(args[0]);
 //			port = Integer.parseInt(args[1]);
@@ -16,33 +16,45 @@ public class MulticastSniffer {
 			port = Integer.parseInt("60000");
 			
 		} catch (Exception e) {
-			// Erro na leitura dos argumentos ou endereço inválido
-			System.err.println("Uso: java MulticastSniffer endereço porta");
+			// Erro na leitura dos argumentos ou endereï¿½o invï¿½lido
+			System.err.println("Uso: java MulticastSniffer endereï¿½o porta");
 			System.exit(1);
 		}
 
 		MulticastSocket ms = null;
+		
+		File file = new File("src"+File.separator+"resources"+File.separator+"snifferOutput.txt");
+		FileWriter fw = null;
 		try {
-			// Cria um socket associado ao endereço do grupo
+			file.createNewFile();
+			fw = new FileWriter(file);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		try {
+			// Cria um socket associado ao endereï¿½o do grupo
 			ms = new MulticastSocket(port);
 			ms.joinGroup(group);
-			// Cria uma Ã¡rea de dados para receber conteúdo dos pacotes
+			// Cria uma Ã¡rea de dados para receber conteï¿½do dos pacotes
 			byte[] buffer = new byte[80];
-			// LaÃ§o para recebimento de pacotes e impressão do conteúdo
+			// LaÃ§o para recebimento de pacotes e impressï¿½o do conteï¿½do
 			while (true) {
 				DatagramPacket dp = new DatagramPacket(buffer, buffer.length);
 				ms.receive(dp);
 				String s = new String(dp.getData());
 				System.out.println(s);
+				fw.write(s+"\n");
+				fw.flush();
 			}
 		} catch (IOException e) {
 			System.err.println(e);
 		}
-		// Em caso de erro ou interrupção do programa,
+		// Em caso de erro ou interrupï¿½ï¿½o do programa,
 		// sinaliza saÃ­da do grupo e fecha socket
 		finally {
 			if (ms != null) {
 				try {
+					fw.close();
 					ms.leaveGroup(group);
 					ms.close();
 				} catch (IOException e) {
