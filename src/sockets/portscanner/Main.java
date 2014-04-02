@@ -16,7 +16,7 @@ public class Main {
 
 				socket = new Socket();
 				// O número no connect indica o timeout em milissegundos
-				socket.connect(new InetSocketAddress("www.ansktracker.net", i), 1000);
+				socket.connect(new InetSocketAddress("www.amazon.com", i), 1000);
 				socket.close();
 				System.out.println("A porta " + i + " aguarda conexões TCP.");
 
