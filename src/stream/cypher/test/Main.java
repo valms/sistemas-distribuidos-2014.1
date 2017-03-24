@@ -14,23 +14,27 @@ public class Main {
 		CypherWriter cw = new CypherWriter(out);
 		CypherReader cr = new CypherReader(in);
 		try {
-			char [] nome = new char[] {'A','r','g','e','u'};
+			
+			// VOGAIS: A E I O U
+			//CONSOANTES: B C D F G H J K L M N P Q R S T V W Y X Z
+			
+			char [] nome = new char[] {'V','a','l','m','a', 'R'};
 			cw.write(nome);
 			cw.flush();
 			System.out.println();
 			cw.write(nome, 0, 3);
 			cw.flush();
 			System.out.println();
-			cw.write("Argeu Aprigio Alcantara");
+			cw.write("Rebeca Mendes Feitoza");
 			cw.flush();
 			System.out.println();
-			cw.write("Thiago Freitas da Ponte");
+			cw.write("Francisco Valmar Isaias Silva Júniro");
 			cw.flush();
 			System.out.println();
-			cw.write("Daniel 'rapier' Santiago");
+			cw.write("Jouderian");
 			cw.flush();
 			System.out.println();
-			System.out.println("'SAY MY NAME!!!' by Xemvis Xjovi: ");
+			System.out.println("'SAY MY NAME!!!' Bitch ");
 			char[] b = new char[255];
 			int size = cr.read(b);
 			for (int i = 0; i < size; i++) {

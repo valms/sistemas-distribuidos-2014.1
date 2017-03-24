@@ -12,27 +12,21 @@ public class EchoServer {
 		System.out.println("Subindo servidor...");
 		int porta = 60000;
 		byte[] buffer = new byte[1000];
-		DatagramPacket pacoteRecebido = new DatagramPacket(buffer,
-				buffer.length);
+		DatagramPacket pacoteRecebido = new DatagramPacket(buffer, buffer.length);
 		DatagramSocket server = null;
 		try {
 			server = new DatagramSocket(porta);
-			server.setSoTimeout(5000);
+			server.setSoTimeout(6000);
 		} catch (SocketException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		while (true) {
 			try {
 				server.receive(pacoteRecebido);
-//				String conteudo = new String(pacoteRecebido.getData());
-//				System.out.println(conteudo);
 				pacoteRecebido.setPort(server.getLocalPort() + 1);
 				server.send(pacoteRecebido);
 			} catch (SocketTimeoutException e) {
-				// caso solte um sockettimeoutexception, sai do loop, nao tem
-				// mais pacotes pra receber
-//				e.printStackTrace();
+				System.out.println(e.getMessage());
 				break;
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -41,6 +35,7 @@ public class EchoServer {
 		System.out.println("Fechando servidor...");
 		server.close();
 	}
+
 	public static void main(String[] args) {
 		start();
 	}

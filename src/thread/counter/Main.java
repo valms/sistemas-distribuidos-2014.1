@@ -13,5 +13,5 @@ public class Main {
 		contador2.start();
 		contador3.start();
 		System.out.println("Contadores foram iniciados.");
-		}
+	}
 }

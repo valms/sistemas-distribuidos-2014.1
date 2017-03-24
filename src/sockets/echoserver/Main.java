@@ -2,15 +2,15 @@ package sockets.echoserver;
 
 import java.util.concurrent.Semaphore;
 
-
 public class Main {
 	public static Semaphore s = new Semaphore(2);
-	
+
 	public static void main(String[] args) {
 		try {
 			s.acquire(1);
 			new Thread(new Runnable() {
 				public void run() {
+					System.out.println("Iniciado host");
 					EchoServer.start();
 					s.release(1);
 				}

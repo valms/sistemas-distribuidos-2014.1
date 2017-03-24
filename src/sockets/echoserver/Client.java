@@ -14,13 +14,11 @@ public class Client {
 		int porta = 60000;
 		int pacotes = 1000;
 		try {
-//			InetAddress localhost = InetAddress.getLocalHost();
-			InetAddress localhost = InetAddress.getByName("all-systems.mcast.net");
+			
+			
+			InetAddress localhost = InetAddress.getByName("127.0.0.1");
 			DatagramSocket client = new DatagramSocket();
 			DatagramPacket pacoteEnviado;
-
-			// gerar pacotes com os valores de i e enviá-los, assim fica fácil
-			// testar ordem de recebimento depois
 			for (int i = 0; i < pacotes; i++) {
 				byte[] dados = Integer.toString(i).getBytes();
 				pacoteEnviado = new DatagramPacket(dados, dados.length, localhost, porta);
@@ -47,30 +45,28 @@ public class Client {
 		} catch (SocketException e1) {
 			e1.printStackTrace();
 		}
-		// analisar os pacotes enviados pelo servidor de eco
 		while (true) {
 			try {
 				analisador.receive(pacoteRecebido);
 				String conteudo = new String(pacoteRecebido.getData(), 0, pacoteRecebido.getLength());
 				int valor = Integer.parseInt(conteudo);
-				if(valor != pacotesRecebidos){
+				if (valor != pacotesRecebidos) {
 					pulouPacotes = true;
 				}
 				if (valor <= valorAnterior) {
 					mudouOrdem = true;
 				}
-//				System.out.println("Pacotes Recebidos: "+pacotesRecebidos);
-//				System.out.println("Valor: "+valor);
+				 System.out.println("Pacotes Recebidos: "+pacotesRecebidos);
+				// System.out.println("Valor: "+valor);
 				pacotesRecebidos++;
 				valorAnterior = valor;
 			} catch (SocketTimeoutException e) {
-				// caso solte um sockettimeoutexception, sai do loop, não tem
+				// caso solte um sockettimeoutexception, sai do loop, nï¿½o tem
 				// mais pacotes pra receber
 				break;
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-
 
 		}
 		System.out.println("Fechando cliente...");
@@ -80,16 +76,16 @@ public class Client {
 		if (mudouOrdem) {
 			System.out.println("Mudou ordem de entrega do recebimento? Sim");
 		} else {
-			System.out.println("Mudou ordem de entrega do recebimento? Não");
+			System.out.println("Mudou ordem de entrega do recebimento? Nï¿½o");
 		}
 		if (pulouPacotes) {
 			System.out.println("Pulou pacotes no recebimento? Sim");
 		} else {
-			System.out.println("Pulou pacotes no recebimento? Não");
+			System.out.println("Pulou pacotes no recebimento? Nï¿½o");
 		}
 
 	}
-	
+
 	public static void main(String[] args) {
 		start();
 	}

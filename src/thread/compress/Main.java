@@ -19,7 +19,8 @@ public class Main {
 	public static void main(String[] args) {
 		int aux = 0;
 		JFileChooser fileChooser = new JFileChooser();
-		// TODO mudar de ArrayList<File> listaArquivos para List<File> listaArquivos
+		// TODO mudar de ArrayList<File> listaArquivos para List<File>
+		// listaArquivos
 		ArrayList<File> listaArquivos = new ArrayList<File>();
 		while (aux == 0) {
 			aux = fileChooser.showDialog(null, "Selecionar");
@@ -37,11 +38,12 @@ public class Main {
 			long inicio = Calendar.getInstance().getTimeInMillis();
 			for (int j = 0; j < listaArquivos.size(); j++) {
 				File file = listaArquivos.get(j);
-				filePaths[j] = "src" + File.separator + "resources" + File.separator + file.getName() + "-" + (i + 1) + ".zip";
+				filePaths[j] = "src" + File.separator + "resources" + File.separator + file.getName() + "-" + (i + 1)
+						+ ".zip";
 				FileUtils.compressFile(filePaths[j], file.getName(), file.getAbsolutePath());
 			}
 			long fim = Calendar.getInstance().getTimeInMillis();
-//			FileUtils.deleteFiles(filePaths);
+			// FileUtils.deleteFiles(filePaths);
 			temposLinear[i] = (fim - inicio) / 1000.0;
 			mediaLinear += temposLinear[i];
 		}
@@ -54,8 +56,8 @@ public class Main {
 		long inicio = Calendar.getInstance().getTimeInMillis();
 		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < listaArquivos.size(); j++) {
-				filePaths[j] = "src" + File.separator + "resources" + File.separator + listaArquivos.get(j).getName() + "-" + "Thread-"
-						+ (j + 1) + "-" + ((int) (Math.random() * 1000)) + ".zip";
+				filePaths[j] = "src" + File.separator + "resources" + File.separator + listaArquivos.get(j).getName()
+						+ "-" + "Thread-" + (j + 1) + "-" + ((int) (Math.random() * 1000)) + ".zip";
 				try {
 					semaforo.acquire(1);
 					new Thread(new CompressThread(filePaths[j], listaArquivos.get(j), semaforo)).start();
@@ -67,7 +69,7 @@ public class Main {
 				semaforo.acquire(size);
 				long fim = Calendar.getInstance().getTimeInMillis();
 				semaforo.release(size);
-//				FileUtils.deleteFiles(filePaths);
+				// FileUtils.deleteFiles(filePaths);
 				temposParalelo[i] = (fim - inicio) / 1000.0;
 				mediaParalelo += temposParalelo[i];
 			} catch (InterruptedException e) {
@@ -75,17 +77,18 @@ public class Main {
 			}
 		}
 		mediaParalelo /= 5;
-//		try {
-//			//escreve na planilha
-//			DataSheetUtils dsu = new DataSheetUtils("src" + File.separator + "resources" + File.separator+"planilha teste.xls");
-//			dsu.writeLine("profile teste", 1, mediaLinear, mediaParalelo);
-//			dsu.closeSheet();
-//		} catch (WriteException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		// try {
+		// //escreve na planilha
+		// DataSheetUtils dsu = new DataSheetUtils("src" + File.separator +
+		// "resources" + File.separator+"planilha teste.xls");
+		// dsu.writeLine("profile teste", 1, mediaLinear, mediaParalelo);
+		// dsu.closeSheet();
+		// } catch (WriteException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// } catch (IOException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
 	}
 }
